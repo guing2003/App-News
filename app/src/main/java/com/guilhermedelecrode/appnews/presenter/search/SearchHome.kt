@@ -4,7 +4,7 @@ import com.guilhermedelecrode.appnews.model.NewsResponse
 
 interface SearchHome {
     interface Presenter{
-        fun serach(term : String)
+        fun search(term : String)
         //metodo de sucesso para trazer o newsResponse
         fun onSucces(newsResponse : NewsResponse)
         //metodo de erro para exibir a mensagem

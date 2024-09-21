@@ -6,20 +6,21 @@ import com.guilhermedelecrode.appnews.presenter.ViewHome
 
 class SearchPresenter(val view : ViewHome.View,
                       private val dataSource: NewsDataSource): SearchHome.Presenter{
-    override fun serach(term: String) {
-        TODO("Not yet implemented")
+    override fun search(term: String) {
+        this.view.showProgressBar()
+        this.dataSource.searchNews(term, this)
     }
 
     override fun onSucces(newsResponse: NewsResponse) {
-        TODO("Not yet implemented")
+        this.view.showArticles(newsResponse.articles)
     }
 
     override fun onError(message: String) {
-        TODO("Not yet implemented")
+        this.view.showFailure(message)
     }
 
     override fun onComplete() {
-        TODO("Not yet implemented")
+        this.view.hideProgressBar()
     }
 
 }
