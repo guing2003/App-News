@@ -1,5 +1,6 @@
 package com.guilhermedelecrode.appnews.adapter
 
+import android.icu.text.ListFormatter.Width
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,11 +11,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.guilhermedelecrode.appnews.R
+import com.guilhermedelecrode.appnews.databinding.ItemNewsBinding
 import com.guilhermedelecrode.appnews.model.Article
 
 class MainAdapter : RecyclerView.Adapter<MainAdapter.ArticleViewHolder>() {
 
-    inner class ArticleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    inner class ArticleViewHolder(val binding: ItemNewsBinding) : RecyclerView.ViewHolder(binding.root)
 
     private val differCallBack = object : DiffUtil.ItemCallback<Article>() {
         //Verifica se dois itens representam o mesmo objeto ou não
@@ -33,12 +35,9 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.ArticleViewHolder>() {
     //Cria a View
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder =
         ArticleViewHolder(
-            LayoutInflater.from(parent.context)
-                .inflate(
-                    R.layout.item_news,
-                    parent,
-                    false
-                ) //Item view inflado para exibir no recycler view
+            ItemNewsBinding.inflate(
+                LayoutInflater.from(parent.context),parent, false
+            )
         )
 
     //Verificar o tamanho da lista de itens
@@ -46,26 +45,20 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.ArticleViewHolder>() {
 
     //Linkar os dados do item
     override fun onBindViewHolder(holder: MainAdapter.ArticleViewHolder, position: Int) {
-        val article = differ.currentList[position]
-        holder.itemView.apply {
-            //Precisei fazer esta alteração --- Diferente do Professor
-            //Variaveis que precise fazer para funcionar
-            val imageView = findViewById<ImageView>(R.id.ivArticleImage)
-            val textViewTitle = findViewById<TextView>(R.id.tvTitle)
-            val textViewSource = findViewById<TextView>(R.id.tvSource)
-            val textViewDescription = findViewById<TextView>(R.id.tvDescription)
-            val textViewPublishedAt = findViewById<TextView>(R.id.tvPublishedAt)
 
 
-            Glide.with(this).load(article.urlToImage).into(imageView)
-            textViewTitle.text = article.author ?: article.source?.name
-            textViewSource.text = article.source?.name ?: article.author
-            textViewDescription.text = article.description
-            textViewPublishedAt.text = article.publishedAt
+        with(holder){
+            with(differ.currentList[position]){
+                Glide.with(holder.itemView.context).load(urlToImage).into(binding.ivArticleImage)
+                binding.tvTitle.text = author ?: source?.name
+                binding.tvSource.text = source?.name ?: author
+                binding.tvDescription.text = description
+                binding.tvPublishedAt.text = publishedAt
 
-            setOnClickListener {
-                onItemClickListener?.let{ click ->
-                    click(article)
+                holder.itemView.setOnClickListener{
+                    onItemClickListener?.let {click ->
+                        click(this)
+                    }
                 }
             }
         }

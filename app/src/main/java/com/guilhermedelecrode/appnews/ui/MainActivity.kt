@@ -1,39 +1,38 @@
 package com.guilhermedelecrode.appnews.ui
 
 import android.content.Intent
+import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.guilhermedelecrode.appnews.R
 import com.guilhermedelecrode.appnews.adapter.MainAdapter
+import com.guilhermedelecrode.appnews.databinding.ActivityMainBinding
 import com.guilhermedelecrode.appnews.model.Article
-import com.guilhermedelecrode.appnews.model.NewsResponse
 import com.guilhermedelecrode.appnews.model.data.NewsDataSource
-import com.guilhermedelecrode.appnews.network.NewsAPI
 import com.guilhermedelecrode.appnews.presenter.ViewHome
 import com.guilhermedelecrode.appnews.presenter.news.NewsPresenter
 
-class MainActivity : AbstractActivity(), ViewHome.View {
-
-    lateinit var rvNews: RecyclerView
-    lateinit var rvProgressBar: ProgressBar
+class MainActivity : AppCompatActivity(), ViewHome.View {
 
     private val mainAdapter by lazy {
         MainAdapter()
     }
     private lateinit var presenter: NewsPresenter
+    private lateinit var binding: ActivityMainBinding
 
-    override fun getLayout(): Int = R.layout.activity_main
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        Log.d("ArticleActivity", "ViewBinding initialized")
 
-    override fun onInject() {
-
-        rvNews = findViewById(R.id.rvNews)
-        rvProgressBar = findViewById(R.id.rvProgressBar)
+        val view = binding.root
+        setContentView(view)
 
         val dataSource = NewsDataSource(this)
         presenter = NewsPresenter(this, dataSource)
@@ -51,7 +50,7 @@ class MainActivity : AbstractActivity(), ViewHome.View {
     }
 
     private fun configRecycle() {
-        with(rvNews) {
+        with(binding.rvNews) {
             adapter = mainAdapter
             layoutManager = LinearLayoutManager(this@MainActivity)
             addItemDecoration(
@@ -63,7 +62,7 @@ class MainActivity : AbstractActivity(), ViewHome.View {
     }
 
     override fun showProgressBar() {
-        rvProgressBar.visibility = View.VISIBLE
+        binding.rvProgressBar.visibility = View.VISIBLE
     }
 
     override fun showFailure(message: String) {
@@ -71,7 +70,7 @@ class MainActivity : AbstractActivity(), ViewHome.View {
     }
 
     override fun hideProgressBar() {
-        rvProgressBar.visibility = View.GONE
+        binding.rvProgressBar.visibility = View.GONE
     }
 
     override fun showArticles(articles: List<Article>) {

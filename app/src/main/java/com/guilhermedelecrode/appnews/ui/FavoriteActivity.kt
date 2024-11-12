@@ -1,6 +1,9 @@
 package com.guilhermedelecrode.appnews.ui
 
 import android.content.Intent
+import android.os.Bundle
+import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -8,25 +11,28 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.guilhermedelecrode.appnews.R
 import com.guilhermedelecrode.appnews.adapter.MainAdapter
+import com.guilhermedelecrode.appnews.databinding.ActivityFavoriteBinding
 import com.guilhermedelecrode.appnews.model.Article
 import com.guilhermedelecrode.appnews.model.data.NewsDataSource
 import com.guilhermedelecrode.appnews.presenter.ViewHome
 import com.guilhermedelecrode.appnews.presenter.favorite.FavoritePresenter
 
-class FavoriteActivity : AbstractActivity(), ViewHome.Favorite{
-
-    lateinit var rvFavorite: RecyclerView
+class FavoriteActivity : AppCompatActivity(), ViewHome.Favorite{
 
     private val mainAdapter by lazy{
         MainAdapter()
     }
 
     private lateinit var presenter: FavoritePresenter
-    override fun getLayout(): Int  = R.layout.activity_favorite
+    private lateinit var binding : ActivityFavoriteBinding
 
-    override fun onInject() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityFavoriteBinding.inflate(layoutInflater)
+        Log.d("ArticleActivity", "ViewBinding initialized")
 
-        rvFavorite = findViewById(R.id.rvFavorite)
+        val view = binding.root
+        setContentView(view)
 
         val dataSource = NewsDataSource(this)
         presenter = FavoritePresenter(this, dataSource)
@@ -67,7 +73,7 @@ class FavoriteActivity : AbstractActivity(), ViewHome.Favorite{
         }
 
         ItemTouchHelper(itemTouchPerCallback).apply {
-            attachToRecyclerView(rvFavorite)
+            attachToRecyclerView(binding.rvFavorite)
         }
         presenter.getAll()
     }
@@ -81,7 +87,7 @@ class FavoriteActivity : AbstractActivity(), ViewHome.Favorite{
     }
 
     private fun configRecycle() {
-        with(rvFavorite) {
+        with(binding.rvFavorite) {
             adapter = mainAdapter
             layoutManager = LinearLayoutManager(this@FavoriteActivity)
             addItemDecoration(
