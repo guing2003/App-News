@@ -66,13 +66,13 @@ class NewsDataSource(context : Context){
         }
     }
     //pegar todas as news que foram salvas
-    fun getAllArticle(callback: FavoriteHome){
+    fun getAllArticle(callback: FavoriteHome.Presenter){
         var allArticle: List<Article>
         CoroutineScope(Dispatchers.IO).launch {
             allArticle = newsRepository.getAll()
 
             withContext(Dispatchers.Main){
-                callback.showArticle(allArticle)
+                callback.onSucces(allArticle)
             }
         }
     }

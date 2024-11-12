@@ -14,4 +14,9 @@ interface ViewHome {
         //Para listar os artigos
         fun showArticles(articles : List<Article>)
     }
+
+    interface Favorite{
+        //Para listar os artigos
+        fun showArticles(articles : List<Article>)
+    }
 }

@@ -5,5 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface FavoriteHome {
 
-    fun showArticle(articles: List<Article>)
+    interface Presenter {
+        fun onSucces(articles: List<Article>)
+    }
 }
