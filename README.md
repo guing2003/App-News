@@ -12,7 +12,7 @@ Este é um aplicativo Android de notícias desenvolvido com Kotlin, utilizando a
 ## Tecnologias Usadas
 
 - **Kotlin**: Linguagem principal para o desenvolvimento do app.
-- **MVp**: Arquitetura aplicada para manter o código organizado e com responsabilidades bem definidas.
+- **MVP**: Arquitetura aplicada para manter o código organizado e com responsabilidades bem definidas.
 - **NewsApi**: API externa para busca de notícias em tempo real.
 - **Room**: Biblioteca de persistência de dados locais.
 - **ViewBinding**: Para vinculação de layouts de maneira mais segura e eficiente.
